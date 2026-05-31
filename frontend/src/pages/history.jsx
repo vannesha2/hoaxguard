@@ -42,30 +42,31 @@ function History() {
   };
 
   const deleteSelected = () => {
+  if (selectedItems.length === 0) {
+    alert("Pilih riwayat yang ingin dihapus.");
+    return;
+  }
 
-    if (selectedItems.length === 0) {
-      alert("Pilih riwayat yang ingin dihapus.");
-      return;
-    }
+  const confirmDelete = window.confirm(
+    `Hapus ${selectedItems.length} riwayat yang dipilih?`
+  );
 
-    const confirmDelete = window.confirm(
-      `Hapus ${selectedItems.length} riwayat yang dipilih?`
-    );
+  if (!confirmDelete) return;
 
-    if (!confirmDelete) return;
+  const newHistory = historyData.filter(
+    (_, index) => !selectedItems.includes(index)
+  );
 
-    const newHistory = historyData.filter(
-      (_, index) => !selectedItems.includes(index)
-    );
+  localStorage.setItem(
+    "analysisHistory",
+    JSON.stringify(newHistory)
+  );
 
-    localStorage.setItem(
-      "analysisHistory",
-      JSON.stringify(newHistory)
-    );
+  setSelectedItems([]);
+  setManageMode(false);
 
-    window.location.reload();
-
-  };
+  window.location.href = "/history";
+};
 
   return (
 
