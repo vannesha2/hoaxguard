@@ -12,7 +12,7 @@ import History from "./pages/history";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ForgotPassword from "./pages/forgotPassword";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 
 function App() {
 
