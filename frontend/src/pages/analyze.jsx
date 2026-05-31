@@ -1,18 +1,18 @@
 import { Navigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { analyzeNews } from "../services/api"; // 1. Import fungsi API yang baru dibuat
+import { analyzeNews } from "../services/api"; 
 
 function Analyze() {
   const user = localStorage.getItem("user");
   const [text, setText] = useState("");
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false); // State untuk efek loading
+  const [loading, setLoading] = useState(false);
 
   if (!user) {
     return <Navigate to="/login" />;
   }
 
-  // 2. Ubah fungsi menjadi async
+  
   const handleAnalyze = async () => {
     if (!text.trim()) {
       alert("Masukkan teks terlebih dahulu");
@@ -23,12 +23,12 @@ function Analyze() {
     setResult(null);
 
     try {
-      // 3. Panggil API Backend Node.js asli
+      
       const realResult = await analyzeNews(text);
 
       setResult(realResult);
 
-      // Simpan ke riwayat lokal (localStorage)
+     
       const history = JSON.parse(localStorage.getItem("analysisHistory")) || [];
       history.unshift(realResult);
       localStorage.setItem("analysisHistory", JSON.stringify(history));

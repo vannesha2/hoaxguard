@@ -1,18 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 import SplashScreen from "./components/SplashScreen";
 
-import Home from "./pages/Home";
-import Analyze from "./pages/Analyze";
-import Education from "./pages/Education";
-import About from "./pages/About";
-import History from "./pages/History";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/home";
+import Analyze from "./pages/analyze";
+import Education from "./pages/education";
+import About from "./pages/about";
+import History from "./pages/history";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import ForgotPassword from "./pages/forgotPassword";
 
 function App() {
 
