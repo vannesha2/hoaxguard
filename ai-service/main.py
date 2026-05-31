@@ -5,6 +5,10 @@ import tensorflow as tf
 import numpy as np
 import re
 from nltk.corpus import stopwords
+
+import nltk
+nltk.download('stopwords')
+
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import tokenizer_from_json, Tokenizer
 
