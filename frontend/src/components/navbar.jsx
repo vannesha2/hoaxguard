@@ -125,6 +125,26 @@ function Navbar() {
 
         </Link>
 
+        {user && (
+
+          <Link
+            to="/profile"
+            className={
+              location.pathname === "/profile"
+                ? activeClass
+                : normalClass
+            }
+          >
+            Akun
+
+            {location.pathname === "/profile" && (
+              <span className="absolute left-0 -bottom-2 h-1 w-full bg-blue-700 rounded-full animate-pulse"></span>
+            )}
+
+          </Link>
+
+        )}
+
         {!user ? (
 
           <Link

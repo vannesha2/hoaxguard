@@ -5,7 +5,15 @@ import {
   signInWithEmailAndPassword
 } from "firebase/auth";
 
-import { auth } from "../firebase/firebase";
+import {
+  doc,
+  getDoc
+} from "firebase/firestore";
+
+import {
+  auth,
+  db
+} from "../firebase/firebase";
 
 function Login() {
 
@@ -43,13 +51,20 @@ function Login() {
 
       const user = userCredential.user;
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-        })
-      );
+     const userDoc = await getDoc(
+  doc(db, "users", user.uid)
+);
+
+const userData = userDoc.data();
+
+localStorage.setItem(
+  "user",
+  JSON.stringify({
+    uid: user.uid,
+    email: user.email,
+    name: userData?.name || "Pengguna"
+  })
+);
 
       alert("Login berhasil.");
 

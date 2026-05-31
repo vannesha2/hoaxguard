@@ -12,6 +12,7 @@ import History from "./pages/history";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import ForgotPassword from "./pages/forgotPassword";
+import Profile from "./pages/Profile";
 
 function App() {
 
@@ -57,10 +58,10 @@ function App() {
             <Route path="/register" element={<Register />} />
 
             <Route path="/history" element={<History />} />
-            <Route
-              path="/forgot-password"
-              element={<ForgotPassword />}
-            />
+           
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+          
+            <Route path="/profile" element={<Profile />} />
 
           </Routes>
 
