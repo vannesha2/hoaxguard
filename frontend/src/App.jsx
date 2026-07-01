@@ -8,7 +8,6 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/home";
 import Analyze from "./pages/analyze";
 import Education from "./pages/education";
-import About from "./pages/about";
 import History from "./pages/history";
 import Login from "./pages/login";
 import Register from "./pages/register";
@@ -58,7 +57,7 @@ function App() {
             />
 
             <Route path="/education" element={<Education />} />
-            <Route path="/about" element={<About />} />
+      
 
             <Route
               path="/history"
