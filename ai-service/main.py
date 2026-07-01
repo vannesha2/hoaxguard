@@ -1,38 +1,45 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 import tensorflow as tf
 import numpy as np
 import re
 from nltk.corpus import stopwords
-
 import nltk
+
 nltk.download('stopwords')
 
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import tokenizer_from_json, Tokenizer
 
-# =========================
-# FASTAPI
-# =========================
 app = FastAPI()
 
-MAX_LENGTH = 100
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # =========================
-# CLEANING
+# CLEANING (DIUBAH KE BAHASA INDONESIA)
 # =========================
-stop_words = set(stopwords.words('english'))
+stop_words = set(stopwords.words('indonesian')) 
 
 def clean_text(text):
     text = text.lower()
-    text = re.sub(r'http\S+|www\S+', '', text)
-    text = re.sub(r'@\w+|#\w+', '', text)
-    text = re.sub(r'[^a-z\s]', '', text)
+    text = re.sub(r'http\S+|www\S+', 'tautanpalsu', text) 
+    text = re.sub(r'@\w+|#\w+', '', text)      
+    text = re.sub(r'[^a-z\s]', '', text) 
     text = re.sub(r'\s+', ' ', text).strip()
     tokens = text.split()
     tokens = [w for w in tokens if w not in stop_words]
     return ' '.join(tokens)
+
+# 🔥 PERBAIKAN BUG: Tambahkan definisi konstanta MAX_LENGTH di sini!
+MAX_LENGTH = 100
 
 # =========================
 # CUSTOM ATTENTION LAYER
@@ -77,6 +84,10 @@ model = tf.keras.models.load_model(
 try:
     with open('tokenizer.json', 'r', encoding='utf-8') as f:
         tokenizer_data = json.load(f)
+    
+    if isinstance(tokenizer_data, dict):
+        tokenizer_data = json.dumps(tokenizer_data)
+        
     tokenizer = tokenizer_from_json(tokenizer_data)
     print("✅ Tokenizer asli berhasil dimuat!")
 except Exception as e:
@@ -90,24 +101,45 @@ class TextRequest(BaseModel):
 def home():
     return {"message": "AI Service Running"}
 
+# =========================
+# ENDPOINT PREDICT
+# =========================
 @app.post("/predict")
 def predict(data: TextRequest):
     cleaned = clean_text(data.text)
+    words = cleaned.split() 
+    
     seq = tokenizer.texts_to_sequences([cleaned])
+    # Sekarang padded tidak akan error lagi karena MAX_LENGTH sudah terbaca
     padded = pad_sequences(seq, maxlen=MAX_LENGTH, padding='post', truncating='post')
 
     outputs = model.predict(padded)
     
-    # Antisipasi jika output berbentuk list [pred, att_weights] akibat inference_model
+    attention_list = []
     if isinstance(outputs, list):
         prediction_val = outputs[0]
+        att_weights = outputs[1][0].flatten() 
+        
+        for i, word in enumerate(words):
+            if i < MAX_LENGTH and i < len(att_weights): 
+                attention_list.append({
+                    "word": word,
+                    "weight": float(att_weights[i])
+                })
     else:
         prediction_val = outputs
 
     confidence = float(prediction_val[0][0])
-    label = "REAL" if confidence > 0.5 else "HOAX"
+
+    if confidence > 0.5:
+        label = "HOAX"
+        display_confidence = confidence
+    else:
+        label = "FAKTA"
+        display_confidence = 1.0 - confidence
 
     return {
         "prediction": label,
-        "confidence": confidence
+        "confidence": display_confidence,
+        "xai_explanations": attention_list 
     }

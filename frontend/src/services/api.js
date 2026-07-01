@@ -1,21 +1,12 @@
 import axios from "axios";
 
 const API = axios.create({
-
-  baseURL:
-    "https://supportive-purpose-production-c40d.up.railway.app",
-
+  // Diubah ke port 3000 (Express.js), bukan 8000 (FastAPI)
+  baseURL: "http://localhost:3000", 
 });
 
 export const analyzeNews = async (textData) => {
-
-    const response =
-        await API.post(
-            "/api/detect-hoax",
-            { text:textData }
-        );
-
-    return response.data;
+  // Panggil endpoint milik Express.js kamu
+  const response = await API.post("/api/detect-hoax", { text: textData });
+  return response.data;
 };
-
-export default API;
