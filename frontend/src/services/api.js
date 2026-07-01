@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const API = axios.create({
-  // Diubah ke port 3000 (Express.js), bukan 8000 (FastAPI)
-  baseURL: "http://localhost:3000", 
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 export const analyzeNews = async (textData) => {
-  // Panggil endpoint milik Express.js kamu
-  const response = await API.post("/api/detect-hoax", { text: textData });
+  const response = await API.post("/api/detect-hoax", {
+    text: textData,
+  });
+
   return response.data;
 };
