@@ -38,7 +38,7 @@ def clean_text(text):
     tokens = [w for w in tokens if w not in stop_words]
     return ' '.join(tokens)
 
-# 🔥 PERBAIKAN BUG: Tambahkan definisi konstanta MAX_LENGTH di sini!
+
 MAX_LENGTH = 100
 
 # =========================
@@ -110,7 +110,7 @@ def predict(data: TextRequest):
     words = cleaned.split() 
     
     seq = tokenizer.texts_to_sequences([cleaned])
-    # Sekarang padded tidak akan error lagi karena MAX_LENGTH sudah terbaca
+    
     padded = pad_sequences(seq, maxlen=MAX_LENGTH, padding='post', truncating='post')
 
     outputs = model.predict(padded)
