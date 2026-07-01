@@ -40,13 +40,20 @@ app.post("/api/detect-hoax", async (req, res) => {
       date: new Date().toLocaleString("id-ID"),
     });
 
-  } catch (error) {
-    console.error("Gagal terhubung ke FastAPI:", error.message);
+  }catch (error) {
+    console.error("=== ERROR FASTAPI ===");
+
+    if (error.response) {
+        console.error("Status:", error.response.status);
+        console.error("Data:", error.response.data);
+    } else {
+        console.error(error.message);
+    }
 
     return res.status(500).json({
-      message: "Gagal memproses data di AI Service",
+        message: "Gagal memproses data di AI Service"
     });
-  }
+}
 });
 
 const PORT = process.env.PORT || 3000;
